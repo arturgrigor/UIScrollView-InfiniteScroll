@@ -558,17 +558,27 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
         return;
     }
     
+#if !TARGET_OS_TV
     // is user initiated?
     if(![self isDragging]) {
         return;
     }
+#endif
     
     // did it kick in already?
     if(state.loading) {
         return;
     }
+
+    BOOL condition = NO;
     
-    if(contentOffset.y > actionOffset.y) {
+#if !TARGET_OS_TV
+    condition = (contentOffset.y > actionOffset.y);
+#else
+    condition = (contentOffset.y >= actionOffset.y);
+#endif
+    
+    if (condition) {
         TRACE(@"Action.");
         
         // Only show the infinite scroll if it is allowed
@@ -588,9 +598,11 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
  */
 - (void)pb_scrollToInfiniteIndicatorIfNeeded:(BOOL)reveal {
     // do not interfere with user
+#if !TARGET_OS_TV
     if([self isDragging]) {
         return;
     }
+#endif
     
     _PBInfiniteScrollState *state = self.pb_infiniteScrollState;
     
