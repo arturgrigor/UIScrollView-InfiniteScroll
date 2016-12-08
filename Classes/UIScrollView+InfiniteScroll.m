@@ -573,9 +573,9 @@ static const void *kPBInfiniteScrollStateKey = &kPBInfiniteScrollStateKey;
     BOOL condition = NO;
     
 #if !TARGET_OS_TV
-    condition = (contentOffset.y > actionOffset.y);
+    condition = (contentOffset.y > 0) && (contentOffset.y > actionOffset.y);
 #else
-    condition = (contentOffset.y >= actionOffset.y);
+    condition = (contentOffset.y > 0) && (contentOffset.y >= actionOffset.y);
 #endif
     
     if (condition) {
